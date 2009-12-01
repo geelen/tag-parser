@@ -54,24 +54,33 @@ class StatefulTagParser
     end
     [@tags, @errors]
   end
-  
+
   private
 
   #consume!
   def consume str
     if str =~ /^['"]/
-      matches = str.match(/^(['"])(.+?)\1#{@delimiter}(.*)$/)
-      if matches
-        @tags << matches[2]
-        matches[3].strip
-      else
-        @errors << "Missing end quote"
-        str
-      end
+      quoted_token str
     else
-      splits = str.split(@delimiter, 2)
-      @tags << splits.first
-      (splits[1] or "").strip
+      simple_token str
     end
+  end
+
+  def quoted_token str
+    #extracts first quote, quoted section, and remaining string
+    matches = str.match(/^(['"])(.+?)\1#{@delimiter}(.*)$/)
+    if matches
+      @tags << matches[2]
+      matches[3].strip
+    else
+      @errors << "Missing end quote"
+      str
+    end
+  end
+
+  def simple_token str
+    splits = str.split(@delimiter, 2)
+    @tags << splits.first
+    (splits[1] or "").strip
   end
 end

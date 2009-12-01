@@ -4,6 +4,9 @@ class TagParser
 
   def self.parse(input)
     result = Result[[],[]]
+    if input =~ /([^\w'"\.\- ])/
+      return Result[[],["The character '#{$1}' is not allowed in tag names"]]
+    end
     str = input
     while !str.empty?
       str = consume(result, str)

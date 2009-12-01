@@ -17,9 +17,6 @@ class TagParser
     else  
       delimiter = (input =~ /,/) ? "," : " "
       parser = StatefulTagParser.new(delimiter)
-      # Returning two variables seems dirty, but the 
-      # only better alternative I can see is to write 
-      # an Either type, which is not really justified.
       tags,errors = parser.parse(input)
       if !errors.empty?
         Result.with_errors errors
@@ -50,8 +47,12 @@ class StatefulTagParser
   def parse input
     @tags, @errors, str = [], [], input
     while @errors.empty? && !str.empty?
+      # consumes a token from the front of string into @tags or @errors, returning the rest
       str = consume(str)
-    end
+    end  
+    # Returning two variables seems dirty, since in practice it's always
+    # one or the other. The Either typeclass would fit perfectly here,
+    # but is more complex than justified by this use case.
     [@tags, @errors]
   end
 

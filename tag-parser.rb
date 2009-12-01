@@ -48,8 +48,8 @@ class TagParser
      if str =~ /^['"]/
       matches = str.match(/^(['"])([^\1]+?)\1(.*)$/)
       if matches
-        tags << matches.to_a[2]
-        matches.to_a[3]
+        tags << matches[2]
+        matches[3]
       else
         errors << "Missing end quote"
         str

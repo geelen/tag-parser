@@ -45,18 +45,16 @@ class TagParser
   
   #consume!
   def self.consume tags, errors, str
-    %w[" '].each { |b|
-      if str =~ /^#{b}/
-        matches = str.match(/^#{b}([^#{b}]+)#{b}(.*)$/)
-        if matches
-          tags << matches.to_a[1]
-          return matches.to_a[2]
-        else
-          errors << "Missing end quote"
-          return str
-        end
+     if str =~ /^['"]/
+      matches = str.match(/^(['"])([^\1]+?)\1(.*)$/)
+      if matches
+        tags << matches.to_a[2]
+        return matches.to_a[3]
+      else
+        errors << "Missing end quote"
+        return str
       end
-    }
+    end
     splits = str.split(" ")
     tags << splits.first
     return splits[1..-1].join(" ").strip

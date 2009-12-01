@@ -8,6 +8,7 @@ class TagParser
     while !str.empty?
       str = consume(result, str)
     end
+    result.tags.clear if !result.errors.empty?
     result
   end
   
@@ -16,8 +17,13 @@ class TagParser
     %w[" '].each { |b|
       if str =~ /^#{b}/
         matches = str.match(/^#{b}([^#{b}]+)#{b}(.*)$/)
-        result.tags << matches.to_a[1]
-        return matches.to_a[2]
+        if matches
+          result.tags << matches.to_a[1]
+          return matches.to_a[2]
+        else
+          result.errors << "Missing end quote"
+          return ""
+        end
       end
     }
     splits = str.split(" ")

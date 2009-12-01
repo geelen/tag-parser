@@ -4,7 +4,7 @@ class TagParser
   end
 
   def self.parse(input)
-    result = Result[[],[]]
+    result = Result[input.split(" "),[]]
 
     # YOUR CODE SHOULD GO HERE!
     #

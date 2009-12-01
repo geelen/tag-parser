@@ -49,14 +49,15 @@ class TagParser
       matches = str.match(/^(['"])([^\1]+?)\1(.*)$/)
       if matches
         tags << matches.to_a[2]
-        return matches.to_a[3]
+        matches.to_a[3]
       else
         errors << "Missing end quote"
-        return str
+        str
       end
+    else
+      splits = str.split(" ")
+      tags << splits.first
+      splits[1..-1].join(" ").strip
     end
-    splits = str.split(" ")
-    tags << splits.first
-    return splits[1..-1].join(" ").strip
   end
 end

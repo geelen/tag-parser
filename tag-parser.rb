@@ -15,8 +15,8 @@ class TagParser
     if !input_errors.empty?
       Result.with_errors input_errors
     else  
-      delimeter = (input =~ /,/) ? "," : " "
-      parser = StatefulTagParser.new(delimeter)
+      delimiter = (input =~ /,/) ? "," : " "
+      parser = StatefulTagParser.new(delimiter)
       # Returning two variables seems dirty, but the 
       # only better alternative I can see is to write 
       # an Either type, which is not really justified.
@@ -43,8 +43,8 @@ class TagParser
 end
 
 class StatefulTagParser
-  def initialize delimeter
-    @delimeter = delimeter
+  def initialize delimiter
+    @delimiter = delimiter
   end
 
   def parse input
@@ -60,16 +60,16 @@ class StatefulTagParser
   #consume!
   def consume str
     if str =~ /^['"]/
-      matches = str.match(/^(['"])(.+?)\1(.*)$/)
+      matches = str.match(/^(['"])(.+?)\1#{@delimiter}(.*)$/)
       if matches
         @tags << matches[2]
-        matches[3]
+        matches[3].strip
       else
         @errors << "Missing end quote"
         str
       end
     else
-      splits = str.split(@delimeter, 2)
+      splits = str.split(@delimiter, 2)
       @tags << splits.first
       (splits[1] or "").strip
     end

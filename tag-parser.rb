@@ -2,24 +2,28 @@ require 'patches'
 
 class TagParser
   class Result < Struct.new(:tags, :errors)
-    def self.errors errors
+    def self.with_errors errors
       Result[[],errors]
+    end
+    def self.with_tags tags
+      Result[tags,[]]
     end
   end
 
   def self.parse(input)
     input_errors = check_input input
     if !input_errors.empty?
-      Result.errors input_errors
+      Result.with_errors input_errors
     else
-      result = Result[[],[]]
-      str = input
-      while !str.empty?
-        str = consume(result, str)
+      # Returning two variables seems dirty, but the 
+      # only better alternative I can see is to write 
+      # an Either type, which is not really justified.
+      tags,errors = get_tags(input)
+      if !errors.empty?
+        Result.with_errors errors
+      else
+        Result.with_tags tags
       end
-      result.tags.clear if !result.errors.empty?
-      result.tags = result.tags.uniq_by(&:downcase)
-      result
     end
   end
   
@@ -29,6 +33,15 @@ class TagParser
     else
       []
     end
+  end
+  
+  def self.get_tags input
+    result = Result[[],[]]
+    str = input
+    while !str.empty?
+      str = consume(result, str)
+    end
+    [result.tags, result.errors]
   end
   
   #consume!

@@ -29,6 +29,8 @@ class TagParser
     end
   end
   
+  private
+  
   def self.check_input input
     if input =~ /([^\w'"\.\-, ])/
       ["The character '#{$1}' is not allowed in tag names"]
@@ -52,6 +54,8 @@ class StatefulTagParser
     end
     [@tags, @errors]
   end
+  
+  private
 
   #consume!
   def consume str

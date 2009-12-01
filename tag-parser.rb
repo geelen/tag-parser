@@ -55,9 +55,9 @@ class TagParser
         str
       end
     else
-      splits = str.split(" ")
+      splits = str.split(" ",2)
       tags << splits.first
-      splits[1..-1].join(" ").strip
+      splits[1] or ""
     end
   end
 end

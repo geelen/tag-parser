@@ -36,30 +36,29 @@ class TagParser
   end
   
   def self.get_tags input
-    result = Result[[],[]]
-    str = input
-    while !str.empty?
-      str = consume(result, str)
+    tags, errors, str = [], [], input
+    while errors.empty? && !str.empty?
+      str = consume(tags, errors, str)
     end
-    [result.tags, result.errors]
+    [tags, errors]
   end
   
   #consume!
-  def self.consume result, str
+  def self.consume tags, errors, str
     %w[" '].each { |b|
       if str =~ /^#{b}/
         matches = str.match(/^#{b}([^#{b}]+)#{b}(.*)$/)
         if matches
-          result.tags << matches.to_a[1]
+          tags << matches.to_a[1]
           return matches.to_a[2]
         else
-          result.errors << "Missing end quote"
-          return ""
+          errors << "Missing end quote"
+          return str
         end
       end
     }
     splits = str.split(" ")
-    result.tags << splits.first
+    tags << splits.first
     return splits[1..-1].join(" ").strip
   end
 end

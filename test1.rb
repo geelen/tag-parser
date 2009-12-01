@@ -94,7 +94,7 @@ describe TagParser do
 
   it "should ignore duplicates, irrespective of case, using the case of the first instance found" do
     result = TagParser.parse("One three 'two parts' tHree four one")
-    result.tags.should == ["One", "two parts", "three", "four"]
+    result.tags.should == ["One", "three", "two parts", "four"]
     result.errors.should == []
   end
 end

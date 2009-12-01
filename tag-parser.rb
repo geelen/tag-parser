@@ -24,7 +24,7 @@ class TagParser
       if !errors.empty?
         Result.with_errors errors
       else
-        Result.with_tags tags
+        Result.with_tags tags.uniq_by(&:downcase)
       end
     end
   end

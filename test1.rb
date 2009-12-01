@@ -25,19 +25,7 @@ require 'spec'
 #
 # If any of the specs are wrong, or don't make sense, then please let me know so we can fix them.
 
-class TagParser
-  class Result
-    attr_accessor :tags, :errors
-  end
-
-  def self.parse(input)
-    result = Result.new
-
-    # YOUR CODE SHOULD GO HERE!
-    #
-    result
-  end
-end
+require 'tag-parser'
 
 describe TagParser do
   it "should allow nothing as valid input" do

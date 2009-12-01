@@ -1,3 +1,5 @@
+require 'patches'
+
 class TagParser
   class Result < Struct.new(:tags, :errors)
   end
@@ -12,6 +14,7 @@ class TagParser
       str = consume(result, str)
     end
     result.tags.clear if !result.errors.empty?
+    result.tags = result.tags.uniq_by(&:downcase)
     result
   end
   
